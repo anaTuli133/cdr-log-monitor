@@ -1,0 +1,494 @@
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+ * Serving Flask app 'app'
+ * Debug mode: on
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204][DELETE] msc_nokia: 10 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204][DELETE] msc_nokia: 10 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204][DELETE] msc_nokia: 10 entries
+[204][ALL THREAD] Refresh complete
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204][DELETE] msc_nokia: 10 entries
+[204][ALL THREAD] Refresh complete
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[MERGE THREAD] Started
+[REGISTRATION THREAD] Started
+[IPDR THREAD] Started
+[L1_LOADING THREAD] Started
+[204][ALL THREAD] Started
+=======================================================
+CDR Log Monitor Starting…
+CBS CDR Server : 192.168.61.202
+MSC CDR Server : 192.168.61.204
+Dashboard      : http://localhost:5013
+=======================================================
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204][DELETE] msc_nokia: 10 entries
+[204][ALL THREAD] Refresh complete
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 26 entries
+[204][L1] msc_huawei: 50 entries
+[204] File not found: /data02/scripts/process/bin/file_registration/nk_msc_cdr_delete_proc_test_v1.log
+[204][DELETE] msc_nokia: 0 entries
+[204][ALL THREAD] Refresh complete
