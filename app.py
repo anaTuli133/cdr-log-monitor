@@ -124,7 +124,7 @@ msc_registration_logs = defaultdict(list)
 msc_merge_logs = defaultdict(list)
 msc_l1_loading_logs = defaultdict(list)
 msc_delete_logs = defaultdict(list)
-msc_file_counts = {}          # real file counts from sftp_msc dirs on 204
+msc_file_counts = {}
 
 merge_lock = threading.Lock()
 registration_lock = threading.Lock()
@@ -591,18 +591,7 @@ def parse_msc_delete_log(lines_list, label):
     return entries[-10:] if len(entries) > 10 else entries
 
 
-# ═══════════════════════════════════════════════════════════════
-#  NEW: real file count from /data02/sftp_msc on 204
-# ═══════════════════════════════════════════════════════════════
-
 def count_msc_directory_files(client):
-    """
-    Same approach as count_directory_files() on 202:
-    SSH to 204, run ls | wc -l for each directory.
-
-    Nokia  : main, process_dir, dump_dir
-    Huawei : main, process_dir, merge_dir, dump_dir
-    """
     result = {
         'nokia':  {'main': 0, 'process': 0, 'dump': 0},
         'huawei': {'main': 0, 'process': 0, 'merge': 0, 'dump': 0},
@@ -720,7 +709,7 @@ def update_l1_loading_logs():
 
 def update_msc_all_logs():
     print("[204][ALL THREAD] Started")
-    time.sleep(8)   # stagger: 202 connects first
+    time.sleep(8)
     while True:
         try:
             client = get_ssh_client_204()
@@ -741,7 +730,6 @@ def update_msc_all_logs():
                     for segment, filepath in MSC_DELETE_LOG_FILES.items():
                         raw = remote_tail_204(client, filepath, lines=300)
                         msc_delete_logs[segment] = parse_msc_delete_log(raw, segment)
-                # real file counts from sftp_msc dirs
                 counts = count_msc_directory_files(client)
                 with msc_count_lock:
                     msc_file_counts.update(counts)
@@ -829,7 +817,7 @@ def index():
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-serif; background:#f5f5f5; color:#212529; line-height:1.6; }
 .container { max-width:1600px; margin:0 auto; padding:0; }
 
-/* Header */
+/* ── Header ── */
 .header { background:linear-gradient(135deg,#71bd44 0%,#5fae3a 100%); color:white; padding:24px 32px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,.1); }
 .header-content { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; max-width:1600px; margin:0 auto; }
 .header-left { display:flex; align-items:center; gap:20px; }
@@ -845,61 +833,54 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
 .live-clock { padding:8px 16px; background:rgba(255,255,255,.2); border-radius:6px; display:flex; flex-direction:column; align-items:center; gap:2px; }
 .clock-time { font-size:16px; font-weight:600; color:white; font-family:"Courier New",monospace; letter-spacing:1px; }
 
-/* ─── File Count — fixed 7-column grid, items same style ─── */
+/* ── File Count ── */
 .file-count-section { background:white; margin:0 20px 20px 20px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.1); overflow:hidden; }
 .file-count-header { background:linear-gradient(135deg,#71bd44 0%,#5fae3a 100%); color:white; padding:14px 20px; font-weight:600; font-size:16px; }
-.file-count-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0;
-}
-.file-count-item {
-  padding: 20px 16px;
-  border-right: 1px solid #e0e0e0;
-  border-bottom: 1px solid #e0e0e0;
-  transition: background .2s;
-}
+.file-count-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:0; }
+.file-count-item { padding:20px 16px; border-right:1px solid #e0e0e0; border-bottom:1px solid #e0e0e0; transition:background .2s; }
 .file-count-item:hover { background:#f9f9f9; }
 .file-count-category { font-weight:600; font-size:13px; color:#424242; text-transform:uppercase; margin-bottom:12px; letter-spacing:.5px; }
 .file-count-stats { display:flex; flex-direction:column; gap:8px; }
 .file-count-row { display:flex; justify-content:space-between; align-items:center; font-size:12px; }
 .file-count-label { color:#757575; }
 .file-count-value { font-weight:600; font-size:14px; min-width:40px; text-align:right; }
-/* CBS CDR colours */
 .file-count-value.main    { color:#f57c00; }
 .file-count-value.process { color:#2979ff; }
 .file-count-value.merge   { color:#9c27b0; }
-/* MSC — same three colours + green for dump */
 .file-count-value.msc-orange { color:#f57c00; }
 .file-count-value.msc-blue   { color:#2979ff; }
 .file-count-value.msc-purple { color:#9c27b0; }
 .file-count-value.msc-green  { color:#2e7d1f; }
 
-/* Tabs */
+/* ── Main Tabs ── */
 .tab-navigation { background:white; margin:0 20px 20px 20px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.1); overflow:hidden; }
-.tab-buttons { display:flex; border-bottom:2px solid #e0e0e0; }
-.tab-button { flex:1; padding:16px 24px; background:white; border:none; font-size:15px; font-weight:600; color:#757575; cursor:pointer; transition:all .3s; border-bottom:3px solid transparent; }
+.tab-buttons { display:flex; border-bottom:2px solid #e0e0e0; overflow-x:auto; }
+.tab-button { flex:1; min-width:max-content; padding:16px 20px; background:white; border:none; font-size:14px; font-weight:600; color:#757575; cursor:pointer; transition:all .3s; border-bottom:3px solid transparent; white-space:nowrap; }
 .tab-button:hover { background:#f9f9f9; color:#424242; }
 .tab-button.active { color:#71bd44; border-bottom-color:#71bd44; background:#f9fff9; }
 .tab-content { display:none; }
 .tab-content.active { display:block; }
 
-/* Section divider — same green for ALL */
-.section-divider { display:flex; align-items:center; margin:0 20px 16px 20px; }
-.section-divider-line { flex:1; height:2px; background:#e0e0e0; }
-.section-divider-label { padding:6px 16px; background:#71bd44; color:white; border-radius:20px; font-size:13px; font-weight:600; margin:0 12px; white-space:nowrap; }
+/* ── Sub-tabs inside Huawei / Nokia tabs ── */
+.subtab-nav { display:flex; gap:0; margin:20px 20px 0 20px; background:white; border-radius:8px 8px 0 0; box-shadow:0 1px 3px rgba(0,0,0,.1); overflow:hidden; border-bottom:2px solid #e0e0e0; }
+.subtab-btn { flex:1; padding:13px 20px; background:white; border:none; font-size:14px; font-weight:600; color:#757575; cursor:pointer; transition:all .2s; border-bottom:3px solid transparent; }
+.subtab-btn:hover { background:#f9f9f9; color:#424242; }
+.subtab-btn.active { color:#71bd44; border-bottom-color:#71bd44; background:#f9fff9; }
+.subtab-content { display:none; }
+.subtab-content.active { display:block; }
 
-/* Grid */
+/* ── Grid ── */
 .logs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(450px,1fr)); gap:20px; padding:0 20px 20px 20px; }
+.logs-grid-top { padding-top:20px; }
 
-/* Cards — ALL same green header */
+/* ── Cards ── */
 .segment-card { background:white; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,.1); overflow:hidden; transition:box-shadow .2s; }
 .segment-card:hover { box-shadow:0 4px 12px rgba(0,0,0,.15); }
 .segment-header { padding:16px 20px; background:linear-gradient(135deg,#71bd44 0%,#5fae3a 100%); color:white; display:flex; justify-content:space-between; align-items:center; }
 .segment-title { font-size:17px; font-weight:600; text-transform:uppercase; }
 .segment-count { background:rgba(255,255,255,.25); color:white; padding:4px 12px; border-radius:12px; font-size:13px; font-weight:600; }
 
-/* Table */
+/* ── Table ── */
 .logs-table-container { max-height:500px; overflow-y:auto; overflow-x:auto; }
 .logs-table-container::-webkit-scrollbar { width:6px; height:6px; }
 .logs-table-container::-webkit-scrollbar-track { background:#f5f5f5; }
@@ -917,24 +898,20 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
 .logs-table td.status.incomplete { color:#f57c00; }
 .logs-table td.time { color:#757575; font-size:12px; white-space:nowrap; }
 
+/* ── States ── */
 .loading-state { text-align:center; padding:60px 20px; color:#6c757d; grid-column:1/-1; }
 .loading-spinner { width:36px; height:36px; border:3px solid #e0e0e0; border-top-color:#71bd44; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 14px; }
 @keyframes spin { to{transform:rotate(360deg)} }
 
 @media(max-width:1400px){ .file-count-grid{ grid-template-columns:repeat(5,1fr); } }
-@media(max-width:1024px){ .file-count-grid{ grid-template-columns:repeat(4,1fr); } }
-@media(max-width:768px){
-  .logs-grid{ grid-template-columns:1fr; padding:0 10px 10px 10px; }
-  .header{ padding:16px 20px; }
-  .tab-button{ font-size:13px; padding:12px 8px; }
-  .file-count-grid{ grid-template-columns:repeat(3,1fr); }
-}
+@media(max-width:1024px){ .file-count-grid{ grid-template-columns:repeat(4,1fr); } .tab-button{ font-size:13px; padding:12px 14px; } }
+@media(max-width:768px){ .logs-grid{ grid-template-columns:1fr; padding:0 10px 10px 10px; } .header{ padding:16px 20px; } .file-count-grid{ grid-template-columns:repeat(3,1fr); } }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- Header -->
+  <!-- ── Header ── -->
   <div class="header">
     <div class="header-content">
       <div class="header-left">
@@ -951,7 +928,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
     </div>
   </div>
 
-  <!-- File Count Dashboard -->
+  <!-- ── File Count Dashboard ── -->
   <div class="file-count-section">
     <div class="file-count-header">📊 CDR Directory File Counts (Live)</div>
     <div class="file-count-grid" id="fileCountGrid">
@@ -959,79 +936,50 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
     </div>
   </div>
 
-  <!-- Tabs -->
+  <!-- ── Main Tab Bar ── -->
   <div class="tab-navigation">
     <div class="tab-buttons">
       <button class="tab-button active" onclick="switchTab(event,'file-registration')">📋 File Registration</button>
       <button class="tab-button"        onclick="switchTab(event,'merge')">🔄 Merge Logs</button>
       <button class="tab-button"        onclick="switchTab(event,'loading')">📥 Loading</button>
       <button class="tab-button"        onclick="switchTab(event,'regulatory')">📜 Regulatory and LEA Process</button>
+      <button class="tab-button"        onclick="switchTab(event,'huawei')"> 📡 Huawei CDR</button>
+      <button class="tab-button"        onclick="switchTab(event,'nokia')">📶 Nokia CDR</button>
     </div>
   </div>
 
-  <!-- File Registration Tab -->
+  <!-- ══════════════════════════════════════════════════════
+       TAB 1 — File Registration  (202 only, unchanged)
+       ══════════════════════════════════════════════════════ -->
   <div class="tab-content active" id="file-registration-content">
-    <div class="section-divider">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-label">CBS CDR — 192.168.61.202</div>
-      <div class="section-divider-line"></div>
-    </div>
-    <div class="logs-grid" id="fileRegistrationGrid">
+    <div class="logs-grid logs-grid-top" id="fileRegistrationGrid">
       <div class="loading-state"><div class="loading-spinner"></div><div>Loading...</div></div>
-    </div>
-    <div class="section-divider" style="margin-top:8px;">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-label">MSC CDR — 192.168.61.204</div>
-      <div class="section-divider-line"></div>
-    </div>
-    <div class="logs-grid" id="mscRegistrationGrid">
-      <div class="loading-state"><div class="loading-spinner"></div><div>Loading MSC registration logs...</div></div>
     </div>
   </div>
 
-  <!-- Merge Logs Tab -->
+  <!-- ══════════════════════════════════════════════════════
+       TAB 2 — Merge Logs  (202 only, unchanged)
+       ══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="merge-content">
-    <div class="section-divider">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-label">CBS CDR — 192.168.61.202</div>
-      <div class="section-divider-line"></div>
-    </div>
-    <div class="logs-grid" id="mergeLogsGrid">
+    <div class="logs-grid logs-grid-top" id="mergeLogsGrid">
       <div class="loading-state"><div class="loading-spinner"></div><div>Loading...</div></div>
-    </div>
-    <div class="section-divider" style="margin-top:8px;">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-label">MSC CDR — 192.168.61.204</div>
-      <div class="section-divider-line"></div>
-    </div>
-    <div class="logs-grid" id="mscMergeGrid">
-      <div class="loading-state"><div class="loading-spinner"></div><div>Loading MSC merge logs...</div></div>
     </div>
   </div>
 
-  <!-- Loading Tab -->
+  <!-- ══════════════════════════════════════════════════════
+       TAB 3 — Loading  (202 only, unchanged)
+       ══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="loading-content">
-    <div class="section-divider">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-label">CBS CDR — 192.168.61.202</div>
-      <div class="section-divider-line"></div>
-    </div>
-    <div class="logs-grid" id="loadingLogsGrid">
+    <div class="logs-grid logs-grid-top" id="loadingLogsGrid">
       <div class="loading-state"><div class="loading-spinner"></div><div>Loading...</div></div>
-    </div>
-    <div class="section-divider" style="margin-top:8px;">
-      <div class="section-divider-line"></div>
-      <div class="section-divider-label">MSC CDR — 192.168.61.204</div>
-      <div class="section-divider-line"></div>
-    </div>
-    <div class="logs-grid" id="mscLoadingGrid">
-      <div class="loading-state"><div class="loading-spinner"></div><div>Loading MSC loading logs...</div></div>
     </div>
   </div>
 
-  <!-- Regulatory Tab -->
+  <!-- ══════════════════════════════════════════════════════
+       TAB 4 — Regulatory and LEA Process  (IPDR only, unchanged)
+       ══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="regulatory-content">
-    <div class="logs-grid">
+    <div class="logs-grid logs-grid-top">
       <div class="segment-card">
         <div class="segment-header">
           <div class="segment-title">IPDR</div>
@@ -1042,8 +990,8 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
             <thead><tr>
               <th style="width:15%">File Count</th>
               <th style="width:20%">Status</th>
-              <th style="width:30%">Start Time</th>
-              <th style="width:35%">End Time</th>
+              <th style="width:32%">Start Time</th>
+              <th style="width:33%">End Time</th>
             </tr></thead>
             <tbody id="ipdrLogsTable">
               <tr><td colspan="4" style="text-align:center;padding:40px;">
@@ -1056,10 +1004,68 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
     </div>
   </div>
 
-</div>
+  <!-- ══════════════════════════════════════════════════════
+       TAB 5 — Huawei CDR  (204 Huawei data only)
+       Sub-tabs: File Registration | Merge Logs | L1 Loading
+       ══════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="huawei-content">
+    <!-- Sub-tab bar -->
+    <div class="subtab-nav">
+      <button class="subtab-btn active" onclick="switchSubTab(event,'huawei','hw-reg')">📋 File Registration</button>
+      <button class="subtab-btn"        onclick="switchSubTab(event,'huawei','hw-merge')">🔄 Merge Logs</button>
+      <button class="subtab-btn"        onclick="switchSubTab(event,'huawei','hw-load')">📥 L1 Loading</button>
+    </div>
+
+    <div class="subtab-content active" id="hw-reg-content">
+      <div class="logs-grid logs-grid-top" id="hwRegGrid">
+        <div class="loading-state"><div class="loading-spinner"></div><div>Loading Huawei registration logs...</div></div>
+      </div>
+    </div>
+    <div class="subtab-content" id="hw-merge-content">
+      <div class="logs-grid logs-grid-top" id="hwMergeGrid">
+        <div class="loading-state"><div class="loading-spinner"></div><div>Loading Huawei merge logs...</div></div>
+      </div>
+    </div>
+    <div class="subtab-content" id="hw-load-content">
+      <div class="logs-grid logs-grid-top" id="hwLoadGrid">
+        <div class="loading-state"><div class="loading-spinner"></div><div>Loading Huawei L1 loading logs...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 6 — Nokia CDR  (204 Nokia data only)
+       Sub-tabs: File Registration | L1 Loading | Delete CDR
+       ══════════════════════════════════════════════════════ -->
+  <div class="tab-content" id="nokia-content">
+    <!-- Sub-tab bar -->
+    <div class="subtab-nav">
+      <button class="subtab-btn active" onclick="switchSubTab(event,'nokia','nk-reg')">📋 File Registration</button>
+      <button class="subtab-btn"        onclick="switchSubTab(event,'nokia','nk-load')">📥 L1 Loading</button>
+      <!-- <button class="subtab-btn"        onclick="switchSubTab(event,'nokia','nk-delete')">🗑️ Delete CDR</button> -->
+    </div>
+
+    <div class="subtab-content active" id="nk-reg-content">
+      <div class="logs-grid logs-grid-top" id="nkRegGrid">
+        <div class="loading-state"><div class="loading-spinner"></div><div>Loading Nokia registration logs...</div></div>
+      </div>
+    </div>
+    <div class="subtab-content" id="nk-load-content">
+      <div class="logs-grid logs-grid-top" id="nkLoadGrid">
+        <div class="loading-state"><div class="loading-spinner"></div><div>Loading Nokia L1 loading logs...</div></div>
+      </div>
+    </div>
+    <div class="subtab-content" id="nk-delete-content">
+      <div class="logs-grid logs-grid-top" id="nkDeleteGrid">
+        <div class="loading-state"><div class="loading-spinner"></div><div>Loading Nokia Delete CDR logs...</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
 
 <script>
-/* Tab switching */
+/* ── Tab switching ── */
 function switchTab(event, tabName) {
   document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
@@ -1067,18 +1073,19 @@ function switchTab(event, tabName) {
   document.getElementById(tabName + '-content').classList.add('active');
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ── Sub-tab switching (scoped to each parent tab) ── */
+function switchSubTab(event, parent, subId) {
+  // Update buttons inside this parent
+  document.querySelectorAll('#' + parent + '-content .subtab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  // Update panes inside this parent
+  document.querySelectorAll('#' + parent + '-content .subtab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(subId + '-content').classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════════
    FILE COUNT GRID
-   Layout: 7 columns fixed.
-   Row 1: ADJ CM COM DATA MON SMS TRANSFER
-   Row 2: VOICE VOU MSC_NOKIA MSC_HUAWEI (then empty cells fill)
-
-   CBS CDR: Main(orange) / Process(blue) / Merge(purple)
-   MSC Nokia : Main(orange) / Process(blue) / Dump(purple)
-   MSC Huawei: Main(orange) / Process(blue) / Merge(purple) / Dump(green)
-   ═══════════════════════════════════════════════════════ */
-
-/* CBS CDR item — same as before */
+   ══════════════════════════════════════════════════════════ */
 function cbsCountItem(category, counts) {
   return `<div class="file-count-item">
     <div class="file-count-category">${category.toUpperCase()}</div>
@@ -1089,8 +1096,6 @@ function cbsCountItem(category, counts) {
     </div>
   </div>`;
 }
-
-/* MSC Nokia cell — real counts filled by fetchMscFileCounts() */
 function nokiaCountItem() {
   return `<div class="file-count-item">
     <div class="file-count-category">MSC NOKIA</div>
@@ -1101,8 +1106,6 @@ function nokiaCountItem() {
     </div>
   </div>`;
 }
-
-/* MSC Huawei cell — real counts filled by fetchMscFileCounts() */
 function huaweiCountItem() {
   return `<div class="file-count-item">
     <div class="file-count-category">MSC HUAWEI</div>
@@ -1114,62 +1117,36 @@ function huaweiCountItem() {
     </div>
   </div>`;
 }
-
-/*
-  CBS CDR order from Python: ['adj','cm','com','data','mon','sms','transfer','voice','vou']
-  Grid is 7 columns:
-    Row 1 (cols 1-7): adj  cm  com  data  mon  sms  transfer
-    Row 2 (cols 1-2): voice  vou
-    Row 2 (cols 3-4): MSC Nokia  MSC Huawei   ← appended right after vou
-*/
-function renderFileCountGrid(cbsEntries) {
+function renderFileCountGrid(entries) {
   const grid = document.getElementById('fileCountGrid');
-  // cbsEntries is an array of [category, counts] in dict order
-  // We render them all then append Nokia + Huawei
-  let html = cbsEntries.map(([cat, cnt]) => cbsCountItem(cat, cnt)).join('');
+  let html = entries.map(([cat, cnt]) => cbsCountItem(cat, cnt)).join('');
   html += nokiaCountItem();
   html += huaweiCountItem();
   grid.innerHTML = html;
 }
-
-/* Fetch real file counts from 204 and update the cells */
 async function fetchMscFileCounts() {
   try {
     const r = await fetch('/api/204/file-counts');
     const d = await r.json();
-    const set = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = (val !== undefined && val !== null) ? val : '—';
-    };
-    if (d.counts && d.counts.nokia) {
-      set('nokia-main',    d.counts.nokia.main);
-      set('nokia-process', d.counts.nokia.process);
-      set('nokia-dump',    d.counts.nokia.dump);
-    }
-    if (d.counts && d.counts.huawei) {
-      set('huawei-main',    d.counts.huawei.main);
-      set('huawei-process', d.counts.huawei.process);
-      set('huawei-merge',   d.counts.huawei.merge);
-      set('huawei-dump',    d.counts.huawei.dump);
-    }
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = (val !== undefined && val !== null) ? val : '—'; };
+    if (d.counts && d.counts.nokia)  { set('nokia-main', d.counts.nokia.main); set('nokia-process', d.counts.nokia.process); set('nokia-dump', d.counts.nokia.dump); }
+    if (d.counts && d.counts.huawei) { set('huawei-main', d.counts.huawei.main); set('huawei-process', d.counts.huawei.process); set('huawei-merge', d.counts.huawei.merge); set('huawei-dump', d.counts.huawei.dump); }
   } catch(e) { console.error('[MSC file counts]', e); }
 }
 
-/* ═══════════════════════════════════════
-   CARD BUILDERS — all same green header
-   ═══════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   SHARED CARD / ROW BUILDERS
+   ══════════════════════════════════════════════════════════ */
 function statusCell(status) {
   const ok   = ['Registration Complete','Merge','Loaded','Delete Complete','Transferred'].includes(status);
   const warn = ['No file for Registration','No file for merge','Not Loaded','No IPDR files','No Files Deleted'].some(s => status.includes(s));
   const cls  = ok ? 'completed' : warn ? 'no-files' : 'incomplete';
   const icon = ok ? '✅' : warn ? '⚠️' : '❌';
-  return `<td class="status ${cls}"><span>${icon}</span> ${status}</td>`;
+  return `<td class="status ${cls}">${icon} ${status}</td>`;
 }
-
 function emptyRow(cols, msg) {
   return `<tr><td colspan="${cols}" style="text-align:center;padding:40px;color:#9e9e9e;"><div style="font-size:36px;opacity:.4">📭</div>${msg}</td></tr>`;
 }
-
 function card(title, count, thead, tbody) {
   return `<div class="segment-card">
     <div class="segment-header">
@@ -1218,14 +1195,15 @@ function loadCard(name, logs) {
   return card(label, logs.length, thead, body);
 }
 
-/* Delete CDR (Nokia) */
+/* Delete CDR */
 function deleteRow(log) {
   return `<tr><td class="filename">${log.count}</td>${statusCell(log.status)}<td class="time">${log.start_time}</td><td class="time">${log.end_time}</td></tr>`;
 }
-function deleteCard(logs) {
+function deleteCard(name, logs) {
+  const label = 'DELETE CDR';
   const body  = logs.length ? [...logs].reverse().map(deleteRow).join('') : emptyRow(4,'No delete CDR logs');
   const thead = `<tr><th style="width:15%">File Count</th><th style="width:30%">Status</th><th style="width:27.5%">Start Time</th><th style="width:27.5%">End Time</th></tr>`;
-  return card('MSC NOKIA — DELETE CDR', logs.length, thead, body);
+  return card(label, logs.length, thead, body);
 }
 
 /* IPDR */
@@ -1243,39 +1221,35 @@ function renderIPDR(data) {
   }
 }
 
-/* ═══════════════════════════════════════════════════════
-   PARALLEL FETCH — 202 and 204 together
-   ═══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   DATA FETCHING
+   ══════════════════════════════════════════════════════════ */
 async function refreshAllData() {
-  const [r202, r204] = await Promise.all([
-    Promise.all([
-      fetch('/api/registration-logs').then(r=>r.json()).catch(()=>null),
-      fetch('/api/merge-logs').then(r=>r.json()).catch(()=>null),
-      fetch('/api/l1-loading-logs').then(r=>r.json()).catch(()=>null),
-      fetch('/api/ipdr-logs').then(r=>r.json()).catch(()=>null),
-      fetch('/api/file-counts').then(r=>r.json()).catch(()=>null),
-    ]),
-    Promise.all([
-      fetch('/api/204/registration-logs').then(r=>r.json()).catch(()=>null),
-      fetch('/api/204/merge-logs').then(r=>r.json()).catch(()=>null),
-      fetch('/api/204/l1-loading-logs').then(r=>r.json()).catch(()=>null),
-      fetch('/api/204/delete-logs').then(r=>r.json()).catch(()=>null),
-    ])
+  /* ── 202 data ── */
+  const [regData202, mergeData202, l1Data202, ipdrData, fileCountData] = await Promise.all([
+    fetch('/api/registration-logs').then(r=>r.json()).catch(()=>null),
+    fetch('/api/merge-logs').then(r=>r.json()).catch(()=>null),
+    fetch('/api/l1-loading-logs').then(r=>r.json()).catch(()=>null),
+    fetch('/api/ipdr-logs').then(r=>r.json()).catch(()=>null),
+    fetch('/api/file-counts').then(r=>r.json()).catch(()=>null),
   ]);
 
-  const [regData202, mergeData202, l1Data202, ipdrData, fileCountData] = r202;
-  const [regData204, mergeData204, l1Data204, deleteData204]           = r204;
+  /* ── 204 data ── */
+  const [regData204, mergeData204, l1Data204, deleteData204] = await Promise.all([
+    fetch('/api/204/registration-logs').then(r=>r.json()).catch(()=>null),
+    fetch('/api/204/merge-logs').then(r=>r.json()).catch(()=>null),
+    fetch('/api/204/l1-loading-logs').then(r=>r.json()).catch(()=>null),
+    fetch('/api/204/delete-logs').then(r=>r.json()).catch(()=>null),
+  ]);
 
-  /* File count grid — render CBS CDR items first, then Nokia+Huawei appended */
+  /* ── File count grid ── */
   if (fileCountData && fileCountData.counts) {
     const entries = Object.entries(fileCountData.counts);
     if (entries.length) renderFileCountGrid(entries);
   }
-
-  /* After grid is rendered, fetch real MSC file counts and update cells */
   fetchMscFileCounts();
 
-  /* 202 Registration */
+  /* ── TAB 1: File Registration (202) ── */
   if (regData202 && regData202.segments) {
     const segs = Object.entries(regData202.segments);
     document.getElementById('fileRegistrationGrid').innerHTML = segs.length
@@ -1283,7 +1257,7 @@ async function refreshAllData() {
       : '<div class="loading-state">No data</div>';
   }
 
-  /* 202 Merge */
+  /* ── TAB 2: Merge Logs (202) ── */
   if (mergeData202 && mergeData202.segments) {
     const segs = Object.entries(mergeData202.segments);
     document.getElementById('mergeLogsGrid').innerHTML = segs.length
@@ -1291,7 +1265,7 @@ async function refreshAllData() {
       : '<div class="loading-state">No data</div>';
   }
 
-  /* 202 Loading */
+  /* ── TAB 3: Loading (202) ── */
   if (l1Data202 && l1Data202.segments) {
     const segs = Object.entries(l1Data202.segments);
     document.getElementById('loadingLogsGrid').innerHTML = segs.length
@@ -1299,36 +1273,61 @@ async function refreshAllData() {
       : '<div class="loading-state">No data</div>';
   }
 
-  /* IPDR */
+  /* ── TAB 4: IPDR ── */
   if (ipdrData) renderIPDR(ipdrData);
 
-  /* 204 Registration + Delete */
-  if (regData204 && regData204.segments) {
-    const segs = Object.entries(regData204.segments);
-    let html = segs.length ? segs.map(([n,l]) => regCard(n, l)).join('') : '<div class="loading-state">No MSC data</div>';
-    if (deleteData204 && deleteData204.segments && deleteData204.segments['msc_nokia'])
-      html += deleteCard(deleteData204.segments['msc_nokia']);
-    document.getElementById('mscRegistrationGrid').innerHTML = html;
+  /* ── TAB 5: Huawei CDR (204 msc_huawei only) ── */
+  // File Registration
+  if (regData204 && regData204.segments && regData204.segments['msc_huawei']) {
+    document.getElementById('hwRegGrid').innerHTML =
+      regCard('HUAWEI CDR', regData204.segments['msc_huawei']);
+  } else {
+    document.getElementById('hwRegGrid').innerHTML = '<div class="loading-state">No Huawei registration data</div>';
   }
 
-  /* 204 Merge */
-  if (mergeData204 && mergeData204.segments) {
-    const segs = Object.entries(mergeData204.segments);
-    document.getElementById('mscMergeGrid').innerHTML = segs.length
-      ? segs.map(([n,l]) => mergeCard(n, l)).join('')
-      : '<div class="loading-state">No MSC merge data</div>';
+  // Merge Logs
+  if (mergeData204 && mergeData204.segments && mergeData204.segments['msc_huawei']) {
+    document.getElementById('hwMergeGrid').innerHTML =
+      mergeCard('HUAWEI CDR', mergeData204.segments['msc_huawei']);
+  } else {
+    document.getElementById('hwMergeGrid').innerHTML = '<div class="loading-state">No Huawei merge data</div>';
   }
 
-  /* 204 Loading */
-  if (l1Data204 && l1Data204.segments) {
-    const segs = Object.entries(l1Data204.segments);
-    document.getElementById('mscLoadingGrid').innerHTML = segs.length
-      ? segs.map(([n,l]) => loadCard(n, l)).join('')
-      : '<div class="loading-state">No MSC loading data</div>';
+  // L1 Loading
+  if (l1Data204 && l1Data204.segments && l1Data204.segments['msc_huawei']) {
+    document.getElementById('hwLoadGrid').innerHTML =
+      loadCard('HUAWEI CDR', l1Data204.segments['msc_huawei']);
+  } else {
+    document.getElementById('hwLoadGrid').innerHTML = '<div class="loading-state">No Huawei loading data</div>';
+  }
+
+  /* ── TAB 6: Nokia CDR (204 msc_nokia only) ── */
+  // File Registration
+  if (regData204 && regData204.segments && regData204.segments['msc_nokia']) {
+    document.getElementById('nkRegGrid').innerHTML =
+      regCard('NOKIA CDR', regData204.segments['msc_nokia']);
+  } else {
+    document.getElementById('nkRegGrid').innerHTML = '<div class="loading-state">No Nokia registration data</div>';
+  }
+
+  // L1 Loading
+  if (l1Data204 && l1Data204.segments && l1Data204.segments['msc_nokia']) {
+    document.getElementById('nkLoadGrid').innerHTML =
+      loadCard('NOKIA CDR', l1Data204.segments['msc_nokia']);
+  } else {
+    document.getElementById('nkLoadGrid').innerHTML = '<div class="loading-state">No Nokia loading data</div>';
+  }
+
+  // Delete CDR
+  if (deleteData204 && deleteData204.segments && deleteData204.segments['msc_nokia']) {
+    document.getElementById('nkDeleteGrid').innerHTML =
+      deleteCard('NOKIA CDR', deleteData204.segments['msc_nokia']);
+  } else {
+    document.getElementById('nkDeleteGrid').innerHTML = '<div class="loading-state">No Nokia delete data</div>';
   }
 }
 
-/* Clock */
+/* ── Clock ── */
 function updateClock() {
   const now = new Date();
   const h = String(now.getHours()).padStart(2,'0');
