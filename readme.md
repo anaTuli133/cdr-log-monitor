@@ -6,7 +6,7 @@ Real-time monitoring dashboard for CDR (Call Detail Record) file registration, m
 
 ## 📸 Screenshots / UI
 
-> Add dashboard screenshots below. Suggested shots: full dashboard header, File Registration tab, Merge Logs tab, Huawei/Nokia CDR sub-tabs, Regulatory & LEA tab.
+
 
 <!--
 Example:
@@ -16,8 +16,11 @@ Example:
 -->
 
 | | |
-|---|---|
 | ![screenshot placeholder](screenshots/one.png) | ![screenshot placeholder](screenshots/two.png) |
+| ![screenshot placeholder](screenshots/three.png) | ![screenshot placeholder](screenshots/four.png) |
+| ![screenshot placeholder](screenshots/five.png) | ![screenshot placeholder](screenshots/six.png) |
+| ![screenshot placeholder](screenshots/seven.png) | ![screenshot placeholder](screenshots/eight.png) |
+| ![screenshot placeholder](screenshots/nine.png) | ![screenshot placeholder](screenshots/ten.png) |
 
 ---
 
