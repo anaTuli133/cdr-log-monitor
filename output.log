@@ -25,214 +25,58 @@ Dashboard      : http://localhost:5013
 [204][REGISTRATION] msc_nokia: 150 entries
 [204][REGISTRATION] msc_huawei: 150 entries
 [204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
+[204][L1] msc_nokia: 5 entries
 [204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 698}  huawei={'main': 3, 'process': 237, 'merge': 1, 'dump': 812}
-[204][ALL THREAD] Refresh complete
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[204][REGISTRATION] msc_nokia: 150 entries
-[204][REGISTRATION] msc_huawei: 150 entries
-[204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
-[204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 698}  huawei={'main': 3, 'process': 0, 'merge': 0, 'dump': 814}
-[204][ALL THREAD] Refresh complete
-[204][REGISTRATION] msc_nokia: 150 entries
-[204][REGISTRATION] msc_huawei: 149 entries
-[204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
-[204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 92, 'process': 28, 'merge': 0, 'dump': 814}
-[204][ALL THREAD] Refresh complete
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[204][REGISTRATION] msc_nokia: 150 entries
-[204][REGISTRATION] msc_huawei: 149 entries
-[204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
-[204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 38, 'process': 82, 'merge': 0, 'dump': 814}
-[204][ALL THREAD] Refresh complete
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[204][REGISTRATION] msc_nokia: 150 entries
-[204][REGISTRATION] msc_huawei: 150 entries
-[204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
-[204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 3, 'process': 117, 'merge': 0, 'dump': 814}
-[204][ALL THREAD] Refresh complete
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[204][REGISTRATION] msc_nokia: 150 entries
-[204][REGISTRATION] msc_huawei: 150 entries
-[204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
-[204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 2 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 3, 'process': 117, 'merge': 0, 'dump': 814}
-[204][ALL THREAD] Refresh complete
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[204][REGISTRATION] msc_nokia: 150 entries
-[204][REGISTRATION] msc_huawei: 150 entries
-[204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
-[204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 100, 'process': 117, 'merge': 0, 'dump': 814}
-[204][ALL THREAD] Refresh complete
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[MERGE THREAD] Started
-[REGISTRATION THREAD] Started
-[IPDR THREAD] Started
-[L1_LOADING THREAD] Started
-[204][ALL THREAD] Started
-=======================================================
-CDR Log Monitor Starting...
-CBS CDR Server : 192.168.61.202
-MSC CDR Server : 192.168.61.204
-Dashboard      : http://localhost:5013
-=======================================================
-[204][REGISTRATION] msc_nokia: 150 entries
-[204][REGISTRATION] msc_huawei: 150 entries
-[204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
-[204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 3, 'process': 97, 'merge': 1, 'dump': 814}
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 3, 'process': 112, 'merge': 1, 'dump': 811}
 [204][ALL THREAD] Refresh complete
 [204][REGISTRATION] msc_nokia: 150 entries
 [204][REGISTRATION] msc_huawei: 150 entries
 [204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
+[204][L1] msc_nokia: 5 entries
 [204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 698}  huawei={'main': 3, 'process': 237, 'merge': 1, 'dump': 812}
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 141, 'process': 112, 'merge': 1, 'dump': 811}
 [204][ALL THREAD] Refresh complete
 [204][REGISTRATION] msc_nokia: 150 entries
 [204][REGISTRATION] msc_huawei: 150 entries
 [204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
+[204][L1] msc_nokia: 5 entries
 [204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 698}  huawei={'main': 120, 'process': 0, 'merge': 0, 'dump': 816}
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 3, 'process': 250, 'merge': 1, 'dump': 811}
 [204][ALL THREAD] Refresh complete
 [204][REGISTRATION] msc_nokia: 150 entries
 [204][REGISTRATION] msc_huawei: 150 entries
 [204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
+[204][L1] msc_nokia: 5 entries
 [204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 3, 'process': 117, 'merge': 0, 'dump': 814}
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 123, 'process': 0, 'merge': 0, 'dump': 815}
+[204][ALL THREAD] Refresh complete
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 5 entries
+[204][L1] msc_huawei: 50 entries
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 3, 'process': 112, 'merge': 1, 'dump': 811}
 [204][ALL THREAD] Refresh complete
 [204][REGISTRATION] msc_nokia: 150 entries
 [204][REGISTRATION] msc_huawei: 150 entries
 [204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
+[204][L1] msc_nokia: 5 entries
 [204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 100, 'process': 117, 'merge': 0, 'dump': 814}
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 141, 'process': 112, 'merge': 1, 'dump': 811}
 [204][ALL THREAD] Refresh complete
 [204][REGISTRATION] msc_nokia: 150 entries
 [204][REGISTRATION] msc_huawei: 150 entries
 [204][MERGE] msc_huawei: 150 entries
-[204][L1] msc_nokia: 26 entries
+[204][L1] msc_nokia: 5 entries
 [204][L1] msc_huawei: 50 entries
-[204][DELETE] msc_nokia: 0 entries
-[204][COUNT] nokia={'main': 2, 'process': 23234, 'dump': 683}  huawei={'main': 3, 'process': 97, 'merge': 1, 'dump': 814}
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 3, 'process': 250, 'merge': 1, 'dump': 811}
+[204][ALL THREAD] Refresh complete
+[204][REGISTRATION] msc_nokia: 150 entries
+[204][REGISTRATION] msc_huawei: 150 entries
+[204][MERGE] msc_huawei: 150 entries
+[204][L1] msc_nokia: 5 entries
+[204][L1] msc_huawei: 50 entries
+[204][COUNT] nokia={'main': 2, 'process': 22150, 'dump': 4702}  huawei={'main': 123, 'process': 0, 'merge': 0, 'dump': 815}
 [204][ALL THREAD] Refresh complete

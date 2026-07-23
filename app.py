@@ -32,6 +32,13 @@ SERVER_CONFIG_204 = {
     'password': 'dwhadmin',
 }
 
+SERVER_CONFIG_253 = {
+    'host': '192.168.61.253',
+    'port': 22,
+    'user': 'dwhadmin',
+    'password': 'dwhadmin',
+}
+
 # ═══════════════════════════════════════════════════════════════
 #  202 — Log file definitions
 # ═══════════════════════════════════════════════════════════════
@@ -102,12 +109,28 @@ MSC_MERGE_LOG_FILES = {
 }
 
 MSC_L1_LOADING_LOG_FILES = {
-    'msc_nokia':  '/data02/scripts/process/bin/loading_l1/msc_nokia/nk_msc_cdr_loader_test_v1.log',
+    'msc_nokia':  '/data02/scripts/process/bin/loading_l1/msc_nokia/nk_msc_cdr_loader_test_v3.log',
     'msc_huawei': '/data02/scripts/process/bin/loading_l1/msc_huawei/hw_msc_cdr_loader_test_v1.log',
 }
 
-MSC_DELETE_LOG_FILES = {
-    'msc_nokia': '/data02/scripts/process/bin/delete_cdr/nk_msc_procd_cdr_del_test_v1.log',
+# ═══════════════════════════════════════════════════════════════
+#  253 — Log file definitions
+# ═══════════════════════════════════════════════════════════════
+
+NTMC_Dealer_Info_log_file = {
+    'ntmc_dealer' : '/data02/ntmc_dms_ret_info/dms_retailer_data_transfer.log'
+}
+
+NTMC_Huawei_CDR_Transfer_log_file = {
+    'ntmc_huawei_cdr_transfer' : '/data02/script/process/bin/msc_ntmc/ntmc_hw_msc_cdr_transfer_v1.log'
+}
+
+TMS_Huawei_CDR_Transfer_log_file = {
+    'tms_huawei_cdr_transfer' : '/data02/script/process/bin/msc_tms/tms_hw_msc_cdr_transfer_v1.log'
+}
+
+TMS_Nokia_CDR_Transfer_log_file = {
+    'tms_nokia_cdr_transfer' : '/data02/script/process/bin/msc_tms/tms_nk_msc_cdr_transfer_v1.log'
 }
 
 # ═══════════════════════════════════════════════════════════════
@@ -123,7 +146,6 @@ file_counts = {}
 msc_registration_logs = defaultdict(list)
 msc_merge_logs = defaultdict(list)
 msc_l1_loading_logs = defaultdict(list)
-msc_delete_logs = defaultdict(list)
 msc_file_counts = {}
 
 merge_lock = threading.Lock()
@@ -135,8 +157,19 @@ count_lock = threading.Lock()
 msc_registration_lock = threading.Lock()
 msc_merge_lock = threading.Lock()
 msc_l1_loading_lock = threading.Lock()
-msc_delete_lock = threading.Lock()
 msc_count_lock = threading.Lock()
+
+ntmc_dealer_logs = []
+ntmc_dealer_lock = threading.Lock()
+
+ntmc_huawei_cdr_transfer_log = []
+ntmc_huawei_cdr_transfer_lock = threading.Lock()
+
+tms_huawei_cdr_transfer_log = []
+tms_huawei_cdr_transfer_lock = threading.Lock()
+
+tms_nokia_cdr_transfer_log = []
+tms_nokia_cdr_transfer_lock = threading.Lock()
 
 connection_status = {'connected': False, 'last_error': None, 'last_update': None}
 
@@ -189,6 +222,22 @@ def remote_tail_204(client, filepath, lines=300):
         print(f"[204] File not found: {filepath}")
         return []
     return [l.strip() for l in output.strip().split('\n') if l.strip()]
+
+def get_ssh_client_253():
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(
+            hostname=SERVER_CONFIG_253['host'],
+            port=SERVER_CONFIG_253['port'],
+            username=SERVER_CONFIG_253['user'],
+            password=SERVER_CONFIG_253['password'],
+            timeout=10
+        )
+        return client
+    except Exception as e:
+        print(f"SSH Connection Error (253): {e}")
+        return None
 
 # ═══════════════════════════════════════════════════════════════
 #  202 — Parsers
@@ -555,41 +604,6 @@ def parse_msc_l1_loading_log(lines_list, label):
     return entries[-10:] if len(entries) > 10 else entries
 
 
-def parse_msc_delete_log(lines_list, label):
-    entries = []
-    i = 0
-    while i < len(lines_list):
-        line = lines_list[i]
-        if 'Nokia Processed CDR delete start time:' in line:
-            start_raw = re.search(r'start time:\s*(\d{2}/\d{2}/\d{2})-*\+?(\d{2}:\d{2}:\d{2})', line)
-            start_time = 'N/A'
-            if start_raw:
-                d, t = start_raw.group(1), start_raw.group(2)
-                parts = d.split('/')
-                start_time = f"20{parts[2]}/{parts[0]}/{parts[1]} {t}"
-            end_time = start_time
-            count = 0
-            status = 'Delete Complete'
-            if i + 1 < len(lines_list):
-                next_line = lines_list[i + 1]
-                if 'Nokia MSC processed CDR files are deleted at time:' in next_line:
-                    count_match = re.search(r'Total\s+(\d+)', next_line)
-                    end_raw = re.search(r'at time:\s*(\d{2}/\d{2}/\d{4})-*(\d{2}:\d{2}:\d{2})', next_line)
-                    if count_match:
-                        count = int(count_match.group(1))
-                    if end_raw:
-                        d2, t2 = end_raw.group(1), end_raw.group(2)
-                        p = d2.split('/')
-                        end_time = f"{p[2]}/{p[1]}/{p[0]} {t2}"
-                    if count == 0:
-                        status = 'No Files Deleted'
-                    entries.append({'count': count, 'status': status, 'start_time': start_time, 'end_time': end_time})
-                    i += 2
-                    continue
-        i += 1
-    print(f"[204][DELETE] {label}: {len(entries)} entries")
-    return entries[-10:] if len(entries) > 10 else entries
-
 
 def count_msc_directory_files(client):
     result = {
@@ -622,6 +636,160 @@ def count_msc_directory_files(client):
         print(f"[204][COUNT ERROR] {e}")
 
     return result
+
+# ═══════════════════════════════════════════════════════════════
+#  253 — Parsers
+# ═══════════════════════════════════════════════════════════════
+
+def read_ntmc_dealer_log(client, lines=300):
+    try:
+        log_path = NTMC_Dealer_Info_log_file['ntmc_dealer']
+        command = f"tail -n {lines} {log_path} 2>/dev/null || echo 'FILE_NOT_FOUND'"
+        stdin, stdout, stderr = client.exec_command(command)
+        stdout.channel.recv_exit_status()
+        output = stdout.read().decode('utf-8', errors='ignore')
+        if 'FILE_NOT_FOUND' in output:
+            print(f"[253] File not found: {log_path}")
+            return []
+
+        entries = []
+        for line in output.strip().split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+
+            # DMS File: tt_dms_retailer_info_20241019.csv Size: 18816709 is sent to NTMC at time: 10/20/24----14:33:28
+            match = re.search(
+                r'DMS File:\s*([\w_.\-]+\.csv)\s+Size:\s*([\d\.]*[KMG]?)\s+is sent to NTMC at time:\s*([0-9/]+)-{2,}([0-9:]+)',
+                line
+            )
+            if match:
+                filename = match.group(1)
+                size_raw = match.group(2).strip()
+                size     = size_raw if size_raw else 'N/A'
+                date     = match.group(3).strip()
+                time_val = match.group(4).strip()
+                entries.append({
+                    'filename': filename,
+                    'size':     size,
+                    'status':  'Sent to NTMC',
+                    'time':    f"{date} {time_val}",
+                })
+
+        print(f"[253][NTMC DEALER] {len(entries)} entries parsed")
+        return entries[-10:] if len(entries) > 10 else entries
+
+    except Exception as e:
+        print(f"[253][NTMC DEALER ERROR] {e}")
+        return []
+
+def read_ntmc_huawei_cdr_log(client, lines=300):
+    try:
+        log_path = NTMC_Huawei_CDR_Transfer_log_file['ntmc_huawei_cdr_transfer']
+        command = f"tail -n {lines} {log_path} 2>/dev/null || echo 'FILE_NOT_FOUND'"
+        stdin, stdout, stderr = client.exec_command(command)
+        stdout.channel.recv_exit_status()
+        output = stdout.read().decode('utf-8', errors='ignore')
+        if 'FILE_NOT_FOUND' in output:
+            print(f"[253][NTMC HW CDR] File not found: {log_path}")
+            return []
+
+        entries = []
+        for line in output.strip().split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+
+            # Total 503 Huawei MSC CDR files uploaded a time: 2026-07-12 13:22:36
+            match = re.search(
+                r'Total\s+(\d+)\s+Huawei MSC CDR files uploaded a time:\s*([0-9\-]+\s+[0-9:]+)',
+                line
+            )
+            if match:
+                entries.append({
+                    'count':  int(match.group(1)),
+                    'status': 'Uploaded',
+                    'time':   match.group(2).strip(),
+                })
+
+        print(f"[253][NTMC HW CDR] {len(entries)} entries parsed")
+        return entries[-20:] if len(entries) > 20 else entries
+
+    except Exception as e:
+        print(f"[253][NTMC HW CDR ERROR] {e}")
+        return []
+
+def read_tms_huawei_cdr_log(client, lines=300):
+    try:
+        log_path = TMS_Huawei_CDR_Transfer_log_file['tms_huawei_cdr_transfer']
+        command = f"tail -n {lines} {log_path} 2>/dev/null || echo 'FILE_NOT_FOUND'"
+        stdin, stdout, stderr = client.exec_command(command)
+        stdout.channel.recv_exit_status()
+        output = stdout.read().decode('utf-8', errors='ignore')
+        if 'FILE_NOT_FOUND' in output:
+            print(f"[253][TMS HW CDR] File not found: {log_path}")
+            return []
+
+        entries = []
+        for line in output.strip().split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+
+            # Total 503 Huawei MSC CDR files uploaded a time: 2026-07-12 13:45:06
+            match = re.search(
+                r'Total\s+(\d+)\s+\w+\s+MSC CDR files uploaded a time:\s*([0-9\-]+\s+[0-9:]+)',
+                line
+            )
+            if match:
+                entries.append({
+                    'count':  int(match.group(1)),
+                    'status': 'Uploaded',
+                    'time':   match.group(2).strip(),
+                })
+
+        print(f"[253][TMS HW CDR] {len(entries)} entries parsed")
+        return entries[-20:] if len(entries) > 20 else entries
+
+    except Exception as e:
+        print(f"[253][TMS HW CDR ERROR] {e}")
+        return []
+
+def read_tms_nokia_cdr_log(client, lines=300):
+    try:
+        log_path = TMS_Nokia_CDR_Transfer_log_file['tms_nokia_cdr_transfer']
+        command = f"tail -n {lines} {log_path} 2>/dev/null || echo 'FILE_NOT_FOUND'"
+        stdin, stdout, stderr = client.exec_command(command)
+        stdout.channel.recv_exit_status()
+        output = stdout.read().decode('utf-8', errors='ignore')
+        if 'FILE_NOT_FOUND' in output:
+            print(f"[253][TMS NK CDR] File not found: {log_path}")
+            return []
+
+        entries = []
+        for line in output.strip().split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+
+            # Total 503 Huawei MSC CDR files uploaded a time: 2026-07-12 13:45:06
+            match = re.search(
+                r'Total\s+(\d+)\s+\w+\s+MSC CDR files uploaded a time:\s*([0-9\-]+\s+[0-9:]+)',
+                line
+            )
+            if match:
+                entries.append({
+                    'count':  int(match.group(1)),
+                    'status': 'Uploaded',
+                    'time':   match.group(2).strip(),
+                })
+
+        print(f"[253][TMS NK CDR] {len(entries)} entries parsed")
+        return entries[-20:] if len(entries) > 20 else entries
+
+    except Exception as e:
+        print(f"[253][TMS NK CDR ERROR] {e}")
+        return []
 
 # ═══════════════════════════════════════════════════════════════
 #  Background threads — 202
@@ -726,10 +894,6 @@ def update_msc_all_logs():
                     for segment, filepath in MSC_L1_LOADING_LOG_FILES.items():
                         raw = remote_tail_204(client, filepath, lines=100)
                         msc_l1_loading_logs[segment] = parse_msc_l1_loading_log(raw, segment)
-                with msc_delete_lock:
-                    for segment, filepath in MSC_DELETE_LOG_FILES.items():
-                        raw = remote_tail_204(client, filepath, lines=300)
-                        msc_delete_logs[segment] = parse_msc_delete_log(raw, segment)
                 counts = count_msc_directory_files(client)
                 with msc_count_lock:
                     msc_file_counts.update(counts)
@@ -740,6 +904,86 @@ def update_msc_all_logs():
             time.sleep(300)
         except Exception as e:
             print(f"[204][ALL THREAD ERROR] {e}")
+            time.sleep(300)
+
+# ═══════════════════════════════════════════════════════════════
+#  Background threads — 253
+# ═══════════════════════════════════════════════════════════════
+
+def update_ntmc_dealer_logs():
+    print("[253][NTMC DEALER THREAD] Started")
+    while True:
+        try:
+            client = get_ssh_client_253()
+            if client:
+                data = read_ntmc_dealer_log(client)
+                with ntmc_dealer_lock:
+                    global ntmc_dealer_logs
+                    ntmc_dealer_logs = data
+                client.close()
+                print(f"[253][NTMC DEALER] {len(data)} entries fetched")
+            else:
+                print("[253][NTMC DEALER] Failed to connect")
+            time.sleep(300)
+        except Exception as e:
+            print(f"[253][NTMC DEALER THREAD ERROR] {e}")
+            time.sleep(300)
+
+def update_ntmc_huawei_cdr_transfer_log():
+    print("[253][NTMC HUAWEI CDR TRANSFER THREAD] Started")
+    while True:
+        try:
+            client = get_ssh_client_253()
+            if client:
+                data = read_ntmc_huawei_cdr_log(client)
+                with ntmc_huawei_cdr_transfer_lock:
+                    global ntmc_huawei_cdr_transfer_log
+                    ntmc_huawei_cdr_transfer_log = data
+                client.close()
+                print(f"[253][NTMC HUAWEI CDR TRANSFER] {len(data)} entries fetched")
+            else:
+                print("[253][NTMC HUAWEI CDR TRANSFER] Failed to connect")
+            time.sleep(300)
+        except Exception as e:
+            print(f"[253][NTMC HUAWEI CDR TRANSFER THREAD ERROR] {e}")
+            time.sleep(300)
+
+def update_tms_huawei_cdr_transfer_log():
+    print("[253][TMS HUAWEI CDR TRANSFER THREAD] Started")
+    while True:
+        try:
+            client = get_ssh_client_253()
+            if client:
+                data = read_tms_huawei_cdr_log(client)
+                with tms_huawei_cdr_transfer_lock:
+                    global tms_huawei_cdr_transfer_log
+                    tms_huawei_cdr_transfer_log = data
+                client.close()
+                print(f"[253][TMS HUAWEI CDR TRANSFER] {len(data)} entries fetched")
+            else:
+                print("[253][TMS HUAWEI CDR TRANSFER] Failed to connect")
+            time.sleep(300)
+        except Exception as e:
+            print(f"[253][TMS HUAWEI CDR TRANSFER THREAD ERROR] {e}")
+            time.sleep(300)
+
+def update_tms_nokia_cdr_transfer_log():
+    print("[253][TMS NOKIA CDR TRANSFER THREAD] Started")
+    while True:
+        try:
+            client = get_ssh_client_253()
+            if client:
+                data = read_tms_nokia_cdr_log(client)
+                with tms_nokia_cdr_transfer_lock:
+                    global tms_nokia_cdr_transfer_log
+                    tms_nokia_cdr_transfer_log = data
+                client.close()
+                print(f"[253][TMS NOKIA CDR TRANSFER] {len(data)} entries fetched")
+            else:
+                print("[253][TMS NOKIA CDR TRANSFER] Failed to connect")
+            time.sleep(300)
+        except Exception as e:
+            print(f"[253][TMS NOKIA CDR TRANSFER THREAD ERROR] {e}")
             time.sleep(300)
 
 # ═══════════════════════════════════════════════════════════════
@@ -790,15 +1034,31 @@ def get_msc_l1_loading_logs():
     with msc_l1_loading_lock:
         return jsonify({'timestamp': datetime.now().isoformat(), 'segments': dict(msc_l1_loading_logs)})
 
-@app.route('/api/204/delete-logs')
-def get_msc_delete_logs():
-    with msc_delete_lock:
-        return jsonify({'timestamp': datetime.now().isoformat(), 'segments': dict(msc_delete_logs)})
 
 @app.route('/api/204/file-counts')
 def get_msc_file_counts():
     with msc_count_lock:
         return jsonify({'timestamp': datetime.now().isoformat(), 'counts': dict(msc_file_counts)})
+    
+@app.route('/api/253/ntmc-dealer-logs')
+def get_ntmc_dealer_logs():
+    with ntmc_dealer_lock:
+        return jsonify({'timestamp': datetime.now().isoformat(), 'logs': ntmc_dealer_logs})
+    
+@app.route('/api/253/ntmc-hw-cdr-logs')
+def get_ntmc_hw_cdr_logs():
+    with ntmc_huawei_cdr_transfer_lock:
+        return jsonify({'timestamp': datetime.now().isoformat(), 'logs': ntmc_huawei_cdr_transfer_log})
+
+@app.route('/api/253/tms-hw-cdr-logs')
+def get_tms_hw_cdr_logs():
+    with tms_huawei_cdr_transfer_lock:
+        return jsonify({'timestamp': datetime.now().isoformat(), 'logs': tms_huawei_cdr_transfer_log})
+
+@app.route('/api/253/tms-nk-cdr-logs')
+def get_tms_nk_cdr_logs():
+    with tms_nokia_cdr_transfer_lock:
+        return jsonify({'timestamp': datetime.now().isoformat(), 'logs': tms_nokia_cdr_transfer_log})
 
 # ═══════════════════════════════════════════════════════════════
 #  Dashboard HTML
@@ -949,7 +1209,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
   </div>
 
   <!-- ══════════════════════════════════════════════════════
-       TAB 1 — File Registration  (202 only, unchanged)
+       TAB 1 — File Registration  (202)
        ══════════════════════════════════════════════════════ -->
   <div class="tab-content active" id="file-registration-content">
     <div class="logs-grid logs-grid-top" id="fileRegistrationGrid">
@@ -958,7 +1218,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
   </div>
 
   <!-- ══════════════════════════════════════════════════════
-       TAB 2 — Merge Logs  (202 only, unchanged)
+       TAB 2 — Merge Logs  (202)
        ══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="merge-content">
     <div class="logs-grid logs-grid-top" id="mergeLogsGrid">
@@ -967,7 +1227,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
   </div>
 
   <!-- ══════════════════════════════════════════════════════
-       TAB 3 — Loading  (202 only, unchanged)
+       TAB 3 — Loading  (202)
        ══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="loading-content">
     <div class="logs-grid logs-grid-top" id="loadingLogsGrid">
@@ -976,9 +1236,20 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
   </div>
 
   <!-- ══════════════════════════════════════════════════════
-       TAB 4 — Regulatory and LEA Process  (IPDR only, unchanged)
+       TAB 4 — Regulatory and LEA Process  (IPDR and 253 - NTMC Dealer, NTMC Huawei CDR, TMS HUAWEI, TMS NOKIA)
        ══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="regulatory-content">
+  <!-- Sub-tab bar -->
+  <div class="subtab-nav">
+    <button class="subtab-btn active" onclick="switchSubTab(event,'regulatory','ipdr-sub')">📡 IPDR</button>
+    <button class="subtab-btn"        onclick="switchSubTab(event,'regulatory','ntmc-sub')">🏪 NTMC Dealer Retailer Info</button>
+    <button class="subtab-btn"        onclick="switchSubTab(event,'regulatory','ntmc-hw-sub')">📡 NTMC Huawei CDR Transfer</button>
+    <button class="subtab-btn"        onclick="switchSubTab(event,'regulatory','tms-hw-sub')">📡 TMS Huawei CDR Transfer</button>
+    <button class="subtab-btn"        onclick="switchSubTab(event,'regulatory','tms-nk-sub')">📶 TMS Nokia CDR Transfer</button>
+  </div>
+
+  <!-- IPDR sub-tab (existing content, unchanged) -->
+  <div class="subtab-content active" id="ipdr-sub-content">
     <div class="logs-grid logs-grid-top">
       <div class="segment-card">
         <div class="segment-header">
@@ -1002,6 +1273,113 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- NTMC Dealer sub-tab (new) THIS IS NEW ONE-->
+  <div class="subtab-content" id="ntmc-sub-content">
+    <div class="logs-grid logs-grid-top">
+      <div class="segment-card">
+        <div class="segment-header">
+          <div class="segment-title">NTMC DEALER RETAILER INFO</div>
+          <div class="segment-count" id="ntmc-dealer-count">0</div>
+        </div>
+        <div class="logs-table-container">
+          <table class="logs-table">
+            <thead><tr>
+                <th style="width:35%">File Name</th>
+                <th style="width:15%">Size</th>
+                <th style="width:20%">Status</th>
+                <th style="width:30%">Time</th>
+            </tr></thead>
+            <tbody id="ntmcDealerTable">
+              <tr><td colspan="3" style="text-align:center;padding:40px;">
+                <div class="loading-spinner" style="margin:0 auto 10px;"></div>Loading NTMC Dealer logs...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NTMC Huawei CDR Transfer sub-tab -->
+  <div class="subtab-content" id="ntmc-hw-sub-content">
+    <div class="logs-grid logs-grid-top">
+      <div class="segment-card">
+        <div class="segment-header">
+          <div class="segment-title">NTMC HUAWEI CDR TRANSFER</div>
+          <div class="segment-count" id="ntmc-hw-cdr-count">0</div>
+        </div>
+        <div class="logs-table-container">
+          <table class="logs-table">
+            <thead><tr>
+              <th style="width:20%">File Count</th>
+              <th style="width:30%">Status</th>
+              <th style="width:50%">Time</th>
+            </tr></thead>
+            <tbody id="ntmcHwCdrTable">
+              <tr><td colspan="3" style="text-align:center;padding:40px;">
+                <div class="loading-spinner" style="margin:0 auto 10px;"></div>Loading NTMC Huawei CDR logs...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- TMS Huawei CDR Transfer sub-tab -->
+  <div class="subtab-content" id="tms-hw-sub-content">
+    <div class="logs-grid logs-grid-top">
+      <div class="segment-card">
+        <div class="segment-header">
+          <div class="segment-title">TMS HUAWEI CDR TRANSFER</div>
+          <div class="segment-count" id="tms-hw-cdr-count">0</div>
+        </div>
+        <div class="logs-table-container">
+          <table class="logs-table">
+            <thead><tr>
+              <th style="width:20%">File Count</th>
+              <th style="width:30%">Status</th>
+              <th style="width:50%">Time</th>
+            </tr></thead>
+            <tbody id="tmsHwCdrTable">
+              <tr><td colspan="3" style="text-align:center;padding:40px;">
+                <div class="loading-spinner" style="margin:0 auto 10px;"></div>Loading TMS Huawei CDR logs...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TMS Nokia CDR Transfer sub-tab -->
+  <div class="subtab-content" id="tms-nk-sub-content">
+    <div class="logs-grid logs-grid-top">
+      <div class="segment-card">
+        <div class="segment-header">
+          <div class="segment-title">TMS NOKIA CDR TRANSFER</div>
+          <div class="segment-count" id="tms-nk-cdr-count">0</div>
+        </div>
+        <div class="logs-table-container">
+          <table class="logs-table">
+            <thead><tr>
+              <th style="width:20%">File Count</th>
+              <th style="width:30%">Status</th>
+              <th style="width:50%">Time</th>
+            </tr></thead>
+            <tbody id="tmsNkCdrTable">
+              <tr><td colspan="3" style="text-align:center;padding:40px;">
+                <div class="loading-spinner" style="margin:0 auto 10px;"></div>Loading TMS Nokia CDR logs...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div>
 
   <!-- ══════════════════════════════════════════════════════
@@ -1035,14 +1413,13 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
 
   <!-- ══════════════════════════════════════════════════════
        TAB 6 — Nokia CDR  (204 Nokia data only)
-       Sub-tabs: File Registration | L1 Loading | Delete CDR
+       Sub-tabs: File Registration | L1 Loading
        ══════════════════════════════════════════════════════ -->
   <div class="tab-content" id="nokia-content">
     <!-- Sub-tab bar -->
     <div class="subtab-nav">
       <button class="subtab-btn active" onclick="switchSubTab(event,'nokia','nk-reg')">📋 File Registration</button>
       <button class="subtab-btn"        onclick="switchSubTab(event,'nokia','nk-load')">📥 L1 Loading</button>
-      <!-- <button class="subtab-btn"        onclick="switchSubTab(event,'nokia','nk-delete')">🗑️ Delete CDR</button> -->
     </div>
 
     <div class="subtab-content active" id="nk-reg-content">
@@ -1053,11 +1430,6 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto",sans-ser
     <div class="subtab-content" id="nk-load-content">
       <div class="logs-grid logs-grid-top" id="nkLoadGrid">
         <div class="loading-state"><div class="loading-spinner"></div><div>Loading Nokia L1 loading logs...</div></div>
-      </div>
-    </div>
-    <div class="subtab-content" id="nk-delete-content">
-      <div class="logs-grid logs-grid-top" id="nkDeleteGrid">
-        <div class="loading-state"><div class="loading-spinner"></div><div>Loading Nokia Delete CDR logs...</div></div>
       </div>
     </div>
   </div>
@@ -1138,8 +1510,8 @@ async function fetchMscFileCounts() {
    SHARED CARD / ROW BUILDERS
    ══════════════════════════════════════════════════════════ */
 function statusCell(status) {
-  const ok   = ['Registration Complete','Merge','Loaded','Delete Complete','Transferred'].includes(status);
-  const warn = ['No file for Registration','No file for merge','Not Loaded','No IPDR files','No Files Deleted'].some(s => status.includes(s));
+  const ok   = ['Registration Complete','Merge','Loaded','Transferred','Sent to NTMC','Uploaded'].includes(status);
+  const warn = ['No file for Registration','No file for merge','Not Loaded','No IPDR files','No file'].some(s => status.includes(s));
   const cls  = ok ? 'completed' : warn ? 'no-files' : 'incomplete';
   const icon = ok ? '✅' : warn ? '⚠️' : '❌';
   return `<td class="status ${cls}">${icon} ${status}</td>`;
@@ -1195,16 +1567,6 @@ function loadCard(name, logs) {
   return card(label, logs.length, thead, body);
 }
 
-/* Delete CDR */
-function deleteRow(log) {
-  return `<tr><td class="filename">${log.count}</td>${statusCell(log.status)}<td class="time">${log.start_time}</td><td class="time">${log.end_time}</td></tr>`;
-}
-function deleteCard(name, logs) {
-  const label = 'DELETE CDR';
-  const body  = logs.length ? [...logs].reverse().map(deleteRow).join('') : emptyRow(4,'No delete CDR logs');
-  const thead = `<tr><th style="width:15%">File Count</th><th style="width:30%">Status</th><th style="width:27.5%">Start Time</th><th style="width:27.5%">End Time</th></tr>`;
-  return card(label, logs.length, thead, body);
-}
 
 /* IPDR */
 function renderIPDR(data) {
@@ -1221,6 +1583,7 @@ function renderIPDR(data) {
   }
 }
 
+
 /* ══════════════════════════════════════════════════════════
    DATA FETCHING
    ══════════════════════════════════════════════════════════ */
@@ -1235,12 +1598,17 @@ async function refreshAllData() {
   ]);
 
   /* ── 204 data ── */
-  const [regData204, mergeData204, l1Data204, deleteData204] = await Promise.all([
+  const [regData204, mergeData204, l1Data204] = await Promise.all([
     fetch('/api/204/registration-logs').then(r=>r.json()).catch(()=>null),
     fetch('/api/204/merge-logs').then(r=>r.json()).catch(()=>null),
     fetch('/api/204/l1-loading-logs').then(r=>r.json()).catch(()=>null),
-    fetch('/api/204/delete-logs').then(r=>r.json()).catch(()=>null),
   ]);
+  /* ── 253 data ── */
+  const ntmcData = await fetch('/api/253/ntmc-dealer-logs').then(r=>r.json()).catch(()=>null);
+  const ntmcHwCdrData = await fetch('/api/253/ntmc-hw-cdr-logs').then(r=>r.json()).catch(()=>null);
+  const tmsHwCdrData  = await fetch('/api/253/tms-hw-cdr-logs').then(r=>r.json()).catch(()=>null);
+  const tmsNkCdrData  = await fetch('/api/253/tms-nk-cdr-logs').then(r=>r.json()).catch(()=>null);
+
 
   /* ── File count grid ── */
   if (fileCountData && fileCountData.counts) {
@@ -1275,6 +1643,84 @@ async function refreshAllData() {
 
   /* ── TAB 4: IPDR ── */
   if (ipdrData) renderIPDR(ipdrData);
+
+  /* ── NTMC Dealer ── */
+  if (ntmcData && ntmcData.logs) {
+    const tbody   = document.getElementById('ntmcDealerTable');
+    const countEl = document.getElementById('ntmc-dealer-count');
+    countEl.textContent = ntmcData.logs.length;
+    tbody.innerHTML = ntmcData.logs.length
+      ? [...ntmcData.logs].reverse().map(log =>
+          `<tr>
+            <td class="filename">${log.filename}</td>
+            <td class="filename">${formatSize(log.size)}</td>
+            ${statusCell(log.status)}
+            <td class="time">${log.time}</td>
+          </tr>`
+        ).join('')
+      : emptyRow(4, 'No NTMC Dealer logs available');
+  }
+
+  function formatSize(size) {
+  if (!size || size === 'N/A') return '⚠️ No size';
+  // Already has a unit suffix (K, M, G)
+  if (/[KMG]$/i.test(size)) return size + 'B';
+  // Plain number — format with commas
+  const n = Number(size);
+  if (isNaN(n)) return size;
+  if (n >= 1073741824) return (n / 1073741824).toFixed(2) + ' GB';
+  if (n >= 1048576)    return (n / 1048576).toFixed(2) + ' MB';
+  if (n >= 1024)       return (n / 1024).toFixed(2) + ' KB';
+  return n.toLocaleString() + ' B';
+}
+
+/* ── NTMC Huawei CDR Transfer ── */
+  if (ntmcHwCdrData && ntmcHwCdrData.logs) {
+    const tbody   = document.getElementById('ntmcHwCdrTable');
+    const countEl = document.getElementById('ntmc-hw-cdr-count');
+    countEl.textContent = ntmcHwCdrData.logs.length;
+    tbody.innerHTML = ntmcHwCdrData.logs.length
+      ? [...ntmcHwCdrData.logs].reverse().map(log =>
+          `<tr>
+            <td class="filename">${log.count}</td>
+            ${statusCell(log.status)}
+            <td class="time">${log.time}</td>
+          </tr>`
+        ).join('')
+      : emptyRow(3, 'No NTMC Huawei CDR logs available');
+  }
+
+/* ── TMS Huawei CDR Transfer ── */
+  if (tmsHwCdrData && tmsHwCdrData.logs) {
+    const tbody   = document.getElementById('tmsHwCdrTable');
+    const countEl = document.getElementById('tms-hw-cdr-count');
+    countEl.textContent = tmsHwCdrData.logs.length;
+    tbody.innerHTML = tmsHwCdrData.logs.length
+      ? [...tmsHwCdrData.logs].reverse().map(log =>
+          `<tr>
+            <td class="filename">${log.count}</td>
+            ${statusCell(log.status)}
+            <td class="time">${log.time}</td>
+          </tr>`
+        ).join('')
+      : emptyRow(3, 'No TMS Huawei CDR logs available');
+  }
+
+/* ── TMS Nokia CDR Transfer ── */
+  if (tmsNkCdrData && tmsNkCdrData.logs) {
+    const tbody   = document.getElementById('tmsNkCdrTable');
+    const countEl = document.getElementById('tms-nk-cdr-count');
+    countEl.textContent = tmsNkCdrData.logs.length;
+    tbody.innerHTML = tmsNkCdrData.logs.length
+      ? [...tmsNkCdrData.logs].reverse().map(log =>
+          `<tr>
+            <td class="filename">${log.count}</td>
+            ${statusCell(log.status)}
+            <td class="time">${log.time}</td>
+          </tr>`
+        ).join('')
+      : emptyRow(3, 'No TMS Nokia CDR logs available');
+  }
 
   /* ── TAB 5: Huawei CDR (204 msc_huawei only) ── */
   // File Registration
@@ -1317,22 +1763,14 @@ async function refreshAllData() {
   } else {
     document.getElementById('nkLoadGrid').innerHTML = '<div class="loading-state">No Nokia loading data</div>';
   }
-
-  // Delete CDR
-  if (deleteData204 && deleteData204.segments && deleteData204.segments['msc_nokia']) {
-    document.getElementById('nkDeleteGrid').innerHTML =
-      deleteCard('NOKIA CDR', deleteData204.segments['msc_nokia']);
-  } else {
-    document.getElementById('nkDeleteGrid').innerHTML = '<div class="loading-state">No Nokia delete data</div>';
-  }
 }
 
 /* ── Clock ── */
 function updateClock() {
   const now = new Date();
-  const h = String(now.getHours()).padStart(2,'0');
-  const m = String(now.getMinutes()).padStart(2,'0');
   const s = String(now.getSeconds()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const h = String(now.getHours()).padStart(2,'0');
   document.querySelector('.clock-time').textContent = `${h}:${m}:${s}`;
 }
 
@@ -1356,6 +1794,10 @@ if __name__ == '__main__':
     threading.Thread(target=update_ipdr_logs,         daemon=True).start()
     threading.Thread(target=update_l1_loading_logs,   daemon=True).start()
     threading.Thread(target=update_msc_all_logs,      daemon=True).start()
+    threading.Thread(target=update_ntmc_dealer_logs, daemon=True).start()
+    threading.Thread(target=update_ntmc_huawei_cdr_transfer_log, daemon=True).start()
+    threading.Thread(target=update_tms_huawei_cdr_transfer_log, daemon=True).start()
+    threading.Thread(target=update_tms_nokia_cdr_transfer_log, daemon=True).start()
 
     print("=" * 55)
     print("CDR Log Monitor Starting...")
@@ -1364,4 +1806,4 @@ if __name__ == '__main__':
     print(f"Dashboard      : http://localhost:5013")
     print("=" * 55)
 
-    app.run(host='0.0.0.0', port=5013, debug=True)
+    app.run(host='0.0.0.0', port=5013, debug=False)
