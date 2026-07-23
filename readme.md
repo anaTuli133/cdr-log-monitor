@@ -9,13 +9,13 @@ Real-time monitoring dashboard for CDR (Call Detail Record) file registration, m
 
 
 
-||
-|---|---|
-|![screenshot placeholder](screenshots/one.png)|![screenshot placeholder](screenshots/two.png)|
-|![screenshot placeholder](screenshots/three.png)|![screenshot placeholder](screenshots/four.png)|
-|![screenshot placeholder](screenshots/five.png)|![screenshot placeholder](screenshots/six.png)|
-|![screenshot placeholder](screenshots/seven.png)|![screenshot placeholder](screenshots/eight.png)|
-|![screenshot placeholder](screenshots/nine.png)|![screenshot placeholder](screenshots/ten.png)|
+|   |   |
+| --- | --- |
+| ![screenshot placeholder](screenshots/one.png) | ![screenshot placeholder](screenshots/two.png) |
+| ![screenshot placeholder](screenshots/three.png) | ![screenshot placeholder](screenshots/four.png) |
+| ![screenshot placeholder](screenshots/five.png) | ![screenshot placeholder](screenshots/six.png) |
+| ![screenshot placeholder](screenshots/seven.png) | ![screenshot placeholder](screenshots/eight.png) |
+| ![screenshot placeholder](screenshots/nine.png) | ![screenshot placeholder](screenshots/ten.png) |
 
 ---
 
