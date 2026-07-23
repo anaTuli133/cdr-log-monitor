@@ -1,6 +1,6 @@
 # CDR Log Monitor — Teletalk
 
-Real-time monitoring dashboard for CDR (Call Detail Record) file registration, merging, and loading pipelines across Teletalk's CBS and MSC servers. Built with Flask, paramiko (SSH), and a single-page dashboard UI — no database required, everything is polled live from remote log files.
+Real-time monitoring dashboard for CDR (Call Detail Record) file registration, merging, and loading pipelines across Teletalk's CBS and MSC servers. Built with Flask, paramiko (SSH) and a single-page dashboard UI — no database required, everything is polled live from remote log files.
 
 ---
 
@@ -8,20 +8,15 @@ Real-time monitoring dashboard for CDR (Call Detail Record) file registration, m
 
 
 
-<!--
-Example:
-![Dashboard Overview](docs/screenshots/dashboard-overview.png)
-![File Registration Tab](docs/screenshots/file-registration.png)
-![Huawei CDR Tab](docs/screenshots/huawei-cdr.png)
--->
 
-| | |
+||
 |---|---|
-| ![screenshot placeholder](screenshots/one.png) | ![screenshot placeholder](screenshots/two.png) |
-| ![screenshot placeholder](screenshots/three.png) | ![screenshot placeholder](screenshots/four.png) |
-| ![screenshot placeholder](screenshots/five.png) | ![screenshot placeholder](screenshots/six.png) |
-| ![screenshot placeholder](screenshots/seven.png) | ![screenshot placeholder](screenshots/eight.png) |
-| ![screenshot placeholder](screenshots/nine.png) | ![screenshot placeholder](screenshots/ten.png) |
+|![screenshot placeholder](screenshots/one.png)|![screenshot placeholder](screenshots/two.png)|
+|![screenshot placeholder](screenshots/three.png)|![screenshot placeholder](screenshots/four.png)|
+|![screenshot placeholder](screenshots/five.png)|![screenshot placeholder](screenshots/six.png)|
+|![screenshot placeholder](screenshots/seven.png)|![screenshot placeholder](screenshots/eight.png)|
+|![screenshot placeholder](screenshots/nine.png)|![screenshot placeholder](screenshots/ten.png)|
+
 ---
 
 ## ✨ Features
@@ -92,49 +87,6 @@ All connections use SSH (`paramiko`) with credentials defined in `SERVER_CONFIG`
 - **Frontend:** Vanilla HTML/CSS/JS (single-file template, no build step), auto-refresh via `fetch` + `setInterval`
 - **Data source:** No database — reads directly from remote log files (`tail -n`) and directory listings (`ls | wc -l`) over SSH
 
----
-
-## 🚀 Setup
-
-### Prerequisites
-```bash
-pip install flask paramiko
-```
-
-### Configuration
-Update SSH credentials and paths at the top of the script if your environment differs:
-```python
-SERVER_CONFIG = {
-    'host': '192.168.61.202',
-    'port': 22,
-    'user': 'dwhadmin',
-    'password': 'dwhadmin',
-    ...
-}
-```
-> ⚠️ Consider moving credentials to environment variables or a `.env` file before deploying — they're currently hardcoded in source.
-
-### Run
-```bash
-python app.py
-```
-Dashboard will be available at:
-```
-http://localhost:5013
-```
-
----
-
-## 📁 Project Structure
-
-```
-.
-├── app.py                  # Flask app, SSH pollers, API routes, dashboard HTML
-├── static/
-│   └── teletalk.png        # Header logo
-└── docs/
-    └── screenshots/         # UI screenshots (add your own here)
-```
 
 ---
 
